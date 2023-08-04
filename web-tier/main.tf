@@ -28,13 +28,13 @@ resource "azurerm_linux_virtual_machine_scale_set" "web_vmss" {
   }
 
   network_interface {
-    name    = "web-vmss-nic"
-    primary = true
+    name                      = "web-vmss-nic"
+    primary                   = true
     network_security_group_id = var.web_nsg_id
     ip_configuration {
-      name      = "internal"
-      primary   = true
-      subnet_id = var.web_subnet_id
+      name                                         = "internal"
+      primary                                      = true
+      subnet_id                                    = var.web_subnet_id
       application_gateway_backend_address_pool_ids = azurerm_application_gateway.appgw.backend_address_pool[*].id
     }
   }

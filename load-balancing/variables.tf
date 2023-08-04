@@ -14,6 +14,6 @@ variable "base_name" {
 }
 
 variable "web_subnet_id" {
-    type = string
-    description = "Web subnet id"
+  type        = string
+  description = "Web subnet id"
 }

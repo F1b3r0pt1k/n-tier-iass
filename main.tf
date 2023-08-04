@@ -29,44 +29,44 @@ module "jumpbox" {
 }
 
 module "web_tier" {
-  source         = "./web-tier"
-  location       = var.location
-  rg_name        = var.rg_name
-  base_name      = var.base_name
-  admin_password = var.admin_password
-  web_subnet_id  = module.network.web_subnet_id
-  web_nsg_id     = module.network.web_nsg_id
+  source          = "./web-tier"
+  location        = var.location
+  rg_name         = var.rg_name
+  base_name       = var.base_name
+  admin_password  = var.admin_password
+  web_subnet_id   = module.network.web_subnet_id
+  web_nsg_id      = module.network.web_nsg_id
   appgw_subnet_id = module.network.appgw_subnet_id
-  depends_on     = [azurerm_resource_group.rg]
+  depends_on      = [azurerm_resource_group.rg]
 }
 
 module "business_tier" {
-  source             = "./business-tier"
-  location           = var.location
-  rg_name            = var.rg_name
-  base_name          = var.base_name
-  admin_password     = var.admin_password
-  business_subnet_id = module.network.business_subnet_id
-  web_biz_lb_pool_ids = module.load-balancing.web_biz_lb_pool_ids
+  source                                 = "./business-tier"
+  location                               = var.location
+  rg_name                                = var.rg_name
+  base_name                              = var.base_name
+  admin_password                         = var.admin_password
+  business_subnet_id                     = module.network.business_subnet_id
+  web_biz_lb_pool_ids                    = module.load-balancing.web_biz_lb_pool_ids
   load_balancer_backend_address_pool_ids = [module.load-balancing.web_biz_lb_pool_ids]
-  depends_on         = [azurerm_resource_group.rg]
+  depends_on                             = [azurerm_resource_group.rg]
 }
 
 module "load-balancing" {
-  source         = "./load-balancing"
-  location       = var.location
-  rg_name        = var.rg_name
-  base_name      = var.base_name
-  web_subnet_id  = module.network.web_subnet_id
-  depends_on     = [azurerm_resource_group.rg]
+  source        = "./load-balancing"
+  location      = var.location
+  rg_name       = var.rg_name
+  base_name     = var.base_name
+  web_subnet_id = module.network.web_subnet_id
+  depends_on    = [azurerm_resource_group.rg]
 }
 
 module "data_tier" {
-  source         = "./data-tier"
-  location       = var.location
-  rg_name        = var.rg_name
-  base_name      = var.base_name
-  administrator_login = var.administrator_login
+  source                       = "./data-tier"
+  location                     = var.location
+  rg_name                      = var.rg_name
+  base_name                    = var.base_name
+  administrator_login          = var.administrator_login
   administrator_login_password = var.administrator_login_password
-  depends_on     = [azurerm_resource_group.rg]
+  depends_on                   = [azurerm_resource_group.rg]
 }

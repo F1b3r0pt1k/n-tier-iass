@@ -1,7 +1,7 @@
 resource "random_string" "data_tier" {
-  length           = 4
-  special          = false
-  upper = false
+  length  = 4
+  special = false
+  upper   = false
 }
 
 resource "azurerm_user_assigned_identity" "sql_identity" {
@@ -19,11 +19,11 @@ resource "azurerm_storage_account" "data_tier" {
 }
 
 resource "azurerm_mssql_server" "data_tier" {
-  name                         = "data-tier-sqlserver"
-  resource_group_name          = var.rg_name
-  location                     = var.location
-  version                      = "12.0"
-  
+  name                = "data-tier-sqlserver"
+  resource_group_name = var.rg_name
+  location            = var.location
+  version             = "12.0"
+
   administrator_login          = var.administrator_login
   administrator_login_password = var.administrator_login_password
 
@@ -32,17 +32,17 @@ resource "azurerm_mssql_server" "data_tier" {
     identity_ids = [azurerm_user_assigned_identity.sql_identity.id]
   }
 
-  primary_user_assigned_identity_id            = azurerm_user_assigned_identity.sql_identity.id
-#  transparent_data_encryption_key_vault_key_id = azurerm_key_vault_key.example.id
+  primary_user_assigned_identity_id = azurerm_user_assigned_identity.sql_identity.id
+  #  transparent_data_encryption_key_vault_key_id = azurerm_key_vault_key.example.id
 }
 
 resource "azurerm_mssql_database" "data_tier" {
-  name           = "db01"
-  server_id      = azurerm_mssql_server.data_tier.id
-  collation      = "SQL_Latin1_General_CP1_CI_AS"
-  license_type   = "LicenseIncluded"
-  max_size_gb    = 4
-  read_scale     = true
-  sku_name       = "S0"
-  zone_redundant = true
+  name                        = "db01"
+  server_id                   = azurerm_mssql_server.data_tier.id
+  collation                   = "SQL_Latin1_General_CP1_CI_AS"
+  max_size_gb                 = 1
+  min_capacity                = 0.5
+  auto_pause_delay_in_minutes = 60
+  sku_name                    = "GP_S_Gen5_1"
+  zone_redundant              = true
 }
